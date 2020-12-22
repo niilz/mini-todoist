@@ -4,7 +4,7 @@
   "private": true,
   "license": "UNLICENSED",
   "devDependencies": {
-    "@fitbit/sdk": "~5.0.1",
+    "@fitbit/sdk": "~4.0.1",
     "@fitbit/sdk-cli": "^1.7.3"
   },
   "fitbit": {
@@ -15,7 +15,7 @@
     "wipeColor": "#ffffff",
     "requestedPermissions": [],
     "buildTargets": [
-      "atlas"
+      "meson"
     ],
     "i18n": {},
     "defaultLanguage": "en-US"

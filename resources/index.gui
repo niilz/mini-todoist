@@ -1,0 +1,34 @@
+<svg>
+  <defs>
+    <symbol
+      id="shopping-item"
+      href="#tile-list-item"
+      focusable="false"
+      pointer-events="none"
+      system-events="all"
+      display="none"
+    >
+      <text id="text" />
+      <rect
+        id="touchable"
+        pointer-events="all"
+        x="0"
+        y="0"
+        width="100%"
+        height="100%-2"
+        opacity="0"
+      />
+    </symbol>
+  </defs>
+
+  <use id="shopping-list" href="#tile-list">
+    <var id="virtual" value="1" />
+    <use id="item-pool" href="#tile-list-pool">
+      <use id="item-pool[0]" href="#shopping-item" class="list-item" />
+      <use id="item-pool[1]" href="#shopping-item" class="list-item" />
+      <use id="item-pool[2]" href="#shopping-item" class="list-item" />
+      <use id="item-pool[3]" href="#shopping-item" class="list-item" />
+      <use id="item-pool[4]" href="#shopping-item" class="list-item" />
+    </use>
+  </use>
+</svg>
