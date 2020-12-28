@@ -1,8 +1,8 @@
-import * as msg from "messaging";
+import * as msg from 'messaging';
 import {
   fetchTodoistProjects,
   fetchTodoistProjectListById,
-} from "../companion/todoist.js";
+} from '../companion/todoist.js';
 
 // msg.peerSocket.onopen = () => console.log("COMP: Messaging-Connection opened");
 // Todoist projects-json-structure example:
@@ -45,43 +45,43 @@ import {
   }
 */
 
-msg.peerSocket.onmessage = (evt) => {
-  console.log("COMP: Got request to fetch Data", evt.data);
+msg.peerSocket.onmessage = evt => {
+  console.log('COMP: Got request to fetch Data', evt.data);
   if (!evt.data) {
     return;
   }
-  if (evt.data.command === "loadAllProjects") {
-    fetchTodoistProjects().then((parsedProjects) =>
+  if (evt.data.command === 'loadAllProjects') {
+    fetchTodoistProjects().then(parsedProjects =>
       sendProjectsToApp(parsedProjects)
     );
-  } else if (evt.data.command === "loadProjectListById") {
-    fetchTodoistProjectListById(evt.data.id).then((parsedList) =>
+  } else if (evt.data.command === 'loadProjectListById') {
+    fetchTodoistProjectListById(evt.data.id).then(parsedList =>
       sendItemsToApp(parsedList)
     );
   }
 };
 
 function sendProjectsToApp(projects) {
-  console.log("APP: ITEMS", projects);
+  console.log('APP: ITEMS', projects);
   let simpleProjects = projects.map(({ id, name }) => {
     return { id, name };
   });
 
   if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
-    msg.peerSocket.send({ listType: "project-list", projects: simpleProjects });
+    msg.peerSocket.send({ listType: 'project-list', projects: simpleProjects });
   }
 }
 
 function sendItemsToApp(items) {
-  console.log("APP: ITEMS", items);
+  console.log('APP: ITEMS', items);
   let simpleItems = items.map(({ id, content }) => {
     return { id, name: content };
   });
 
   if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
-    msg.peerSocket.send({ listType: "item-list", items: simpleItems });
+    msg.peerSocket.send({ listType: 'item-list', items: simpleItems });
   }
 }
 
-msg.peerSocket.onerror = (e) =>
+msg.peerSocket.onerror = e =>
   console.log(`COMP: Connection-Error: ${e.code} - ${e.message}`);

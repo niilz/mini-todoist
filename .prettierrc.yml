@@ -1,0 +1,9 @@
+singleQuote: true
+overrides:
+  - files:
+      - '*.gui'
+      - '*.css'
+    options:
+      singleQuote: false
+
+arrowParens: 'avoid'
