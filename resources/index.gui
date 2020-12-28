@@ -64,5 +64,8 @@
         <use id="item-pool[4]" href="#list-item" class="list-item" />
       </use>
     </use>
+    <use id="return-button" href="#square-button" class="button" y="5">
+      <set href="#text" attributeName="text-buffer" to="zurück" />
+    </use>
   </svg>
 </svg>

@@ -5,6 +5,12 @@ const projectList = document.getElementById('project-list');
 const itemList = document.getElementById('item-list');
 const projectsScreen = document.getElementsByClassName('projects-screen')[0];
 const itemsSrceen = document.getElementsByClassName('items-screen')[0];
+const returnButton = document.getElementById('return-button');
+returnButton.onclick = _e => {
+  // Navigate to projects-screen
+  itemsSrceen.style.display = 'none';
+  projectsScreen.style.display = 'inline';
+};
 
 msg.peerSocket.onopen = () => loadProjects();
 
@@ -49,9 +55,6 @@ const projectItemOnClickHandler = (textEl, item) => {
 const listItemOnClickHandler = (textEl, item) => {
   textEl.style.fill = item.active ? 'red' : 'grey';
   item.active = !item.active;
-  // Navigate to projects-screen
-  itemsSrceen.style.display = 'none';
-  projectsScreen.style.display = 'inline';
 };
 
 function configureDelegate(type, elements, action) {
