@@ -5,12 +5,6 @@ const projectList = document.getElementById('project-list');
 const itemList = document.getElementById('item-list');
 const projectsScreen = document.getElementsByClassName('projects-screen')[0];
 const itemsSrceen = document.getElementsByClassName('items-screen')[0];
-const returnButton = document.getElementById('return-button');
-returnButton.onclick = _e => {
-  // Navigate to projects-screen
-  itemsSrceen.style.display = 'none';
-  projectsScreen.style.display = 'inline';
-};
 
 msg.peerSocket.onopen = () => loadProjects();
 
@@ -46,7 +40,7 @@ msg.peerSocket.onerror = e =>
   console.log(`APP: Connection-Error: ${e.code} - ${e.message}`);
 
 const projectItemOnClickHandler = (textEl, item) => {
-  loadProjectById(item.id);
+  loadProjectById(item.id, item.name);
   // Navigate to items-screen
   projectsScreen.style.display = 'none';
   itemsSrceen.style.display = 'inline';
@@ -57,12 +51,12 @@ const listItemOnClickHandler = (textEl, item) => {
   item.active = !item.active;
 };
 
-function configureDelegate(type, elements, action) {
+function configureDelegate(poolType, elements, action) {
   return {
     getTileInfo: idx => {
       const element = elements[idx];
       return {
-        type: type,
+        type: poolType,
         index: idx,
         id: element.id,
         name: element.name,
@@ -70,18 +64,31 @@ function configureDelegate(type, elements, action) {
       };
     },
     configureTile: (tile, item) => {
-      if (item.type === type) {
-        const textEl = tile.getElementById('text');
-        textEl.text = item.name;
-        const touch = tile.getElementById('touchable');
+      const textEl = tile.getElementById('text');
+      textEl.text = item.name;
+      const touch = tile.getElementById('touchable');
+      if (item.id === 'header') {
+        textEl.style.fill = 'white';
+      } else if (item.id === 'footer') {
+        textEl.style.fill = 'green';
+        // Navigate to projects-screen
+        touch.onclick = _e => {
+          itemsSrceen.style.display = 'none';
+          projectsScreen.style.display = 'inline';
+        };
+      } else {
         touch.onclick = _e => action(textEl, item);
       }
     },
   };
 }
 
-function loadProjectById(projectId) {
+function loadProjectById(projectId, projectName) {
   if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
-    msg.peerSocket.send({ command: 'loadProjectListById', id: projectId });
+    msg.peerSocket.send({
+      command: 'loadProjectListById',
+      id: projectId,
+      projectName,
+    });
   }
 }

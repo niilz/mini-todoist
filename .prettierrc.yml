@@ -7,3 +7,5 @@ overrides:
       singleQuote: false
 
 arrowParens: 'avoid'
+
+jsxBracketSameLine: true

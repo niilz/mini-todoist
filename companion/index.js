@@ -56,7 +56,7 @@ msg.peerSocket.onmessage = evt => {
     );
   } else if (evt.data.command === 'loadProjectListById') {
     fetchTodoistProjectListById(evt.data.id).then(parsedList =>
-      sendItemsToApp(parsedList)
+      sendItemsToApp(parsedList, evt.data.projectName)
     );
   }
 };
@@ -66,17 +66,26 @@ function sendProjectsToApp(projects) {
   let simpleProjects = projects.map(({ id, name }) => {
     return { id, name };
   });
+  simpleProjects = [
+    { id: 'header', name: 'Wähle ein Projekt' },
+    ...simpleProjects,
+  ];
 
   if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
     msg.peerSocket.send({ listType: 'project-list', projects: simpleProjects });
   }
 }
 
-function sendItemsToApp(items) {
+function sendItemsToApp(items, project) {
   console.log('APP: ITEMS', items);
   let simpleItems = items.map(({ id, content }) => {
     return { id, name: content };
   });
+  simpleItems = [
+    { id: 'header', name: project },
+    ...simpleItems,
+    { id: 'footer', name: 'zurück' },
+  ];
 
   if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
     msg.peerSocket.send({ listType: 'item-list', items: simpleItems });
