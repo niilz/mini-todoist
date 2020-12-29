@@ -8,6 +8,7 @@ const itemsSrceen = document.getElementById('items-screen');
 const saveScreen = document.getElementById('save-screen');
 const ANIMATION_TIME = 200;
 
+let completedTaskIds = [];
 msg.peerSocket.onopen = () => loadProjects();
 
 msg.peerSocket.onmessage = evt => {
@@ -41,12 +42,20 @@ const projectItemOnClickHandler = (textEl, item) => {
 };
 
 const listItemOnClickHandler = (textEl, item) => {
-  textEl.style.fill = item.active ? 'red' : 'grey';
+  if (item.active) {
+    textEl.style.fill = 'grey';
+    completedTaskIds.push(item.id);
+  } else {
+    textEl.style.fill = 'red';
+    completedTaskIds = completedTaskIds.filter(id => id !== item.id);
+  }
   item.active = !item.active;
 };
 
-document.getElementById('yes').onclick = () =>
+document.getElementById('yes').onclick = () => {
   navigateFromTo(saveScreen, projectsScreen);
+  closeTasksById(completedTaskIds);
+};
 document.getElementById('no').onclick = () =>
   navigateFromTo(saveScreen, itemsSrceen);
 
@@ -74,7 +83,7 @@ function configureDelegate(poolType, elements, action) {
       Object.keys(item.props).forEach(
         prop => (textEl[prop] = item.props[prop])
       );
-      if (item.id === 'back-button') {
+      if (item.id === 'save-button') {
         touch.onclick = _e => {
           navigateFromTo(itemsSrceen, saveScreen);
         };
@@ -85,18 +94,28 @@ function configureDelegate(poolType, elements, action) {
   };
 }
 
+const isSocketReady = () => msg.peerSocket.readyState === msg.peerSocket.OPEN;
 function loadProjects() {
-  if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
+  if (isSocketReady()) {
     msg.peerSocket.send({ command: 'loadAllProjects' });
   }
 }
 
 function loadProjectById(projectId, projectName) {
-  if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
+  if (isSocketReady()) {
     msg.peerSocket.send({
       command: 'loadProjectListById',
       id: projectId,
       projectName,
+    });
+  }
+}
+
+function closeTasksById(taskIds) {
+  if (isSocketReady()) {
+    msg.peerSocket.send({
+      command: 'closeTasks',
+      ids: taskIds,
     });
   }
 }

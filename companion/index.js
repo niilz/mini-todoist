@@ -1,7 +1,8 @@
 import * as msg from 'messaging';
 import {
-  fetchTodoistProjects,
-  fetchTodoistProjectListById,
+  fetchProjects,
+  fetchTasksByProjectId,
+  closeTaskById,
 } from '../companion/todoist.js';
 
 // msg.peerSocket.onopen = () => console.log("COMP: Messaging-Connection opened");
@@ -56,10 +57,10 @@ const headerProps = {
 const defaultStyles = {
   fill: 'blue',
 };
-const backButtonStyles = {
+const saveButtonStyles = {
   fill: 'green',
 };
-const backButtonProps = {
+const saveButtonProps = {
   textAnchor: 'middle',
   x: HORIZONTAL_CENTER,
 };
@@ -70,12 +71,15 @@ msg.peerSocket.onmessage = evt => {
     return;
   }
   if (evt.data.command === 'loadAllProjects') {
-    fetchTodoistProjects().then(parsedProjects =>
-      sendProjectsToApp(parsedProjects)
-    );
+    fetchProjects().then(parsedProjects => sendProjectsToApp(parsedProjects));
   } else if (evt.data.command === 'loadProjectListById') {
-    fetchTodoistProjectListById(evt.data.id).then(parsedList =>
+    fetchTasksByProjectId(evt.data.id).then(parsedList =>
       sendItemsToApp(parsedList, evt.data.projectName)
+    );
+  } else if (evt.data.command === 'closeTasks') {
+    const closePromises = evt.data.ids.map(closeTaskById);
+    Promise.all(closePromises).then(resolvedVals =>
+      console.log('closedMsgs', resolvedVals)
     );
   }
 };
@@ -110,10 +114,10 @@ function sendItemsToApp(items, project) {
     { id: 'header', name: project, styles: headerStyles, props: headerProps },
     ...viewItems,
     {
-      id: 'back-button',
-      name: 'zurück',
-      styles: backButtonStyles,
-      props: backButtonProps,
+      id: 'save-button',
+      name: 'speichern',
+      styles: saveButtonStyles,
+      props: saveButtonProps,
     },
   ];
 
