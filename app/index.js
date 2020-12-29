@@ -12,7 +12,7 @@ let completedTaskIds = [];
 msg.peerSocket.onopen = () => loadProjects();
 
 msg.peerSocket.onmessage = evt => {
-  if (!evt.data) {
+  if (!evt || !evt.data) {
     return;
   }
   if (evt.data.listType === 'project-list') {
