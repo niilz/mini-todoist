@@ -5,6 +5,7 @@ const projectList = document.getElementById('project-list');
 const itemList = document.getElementById('item-list');
 const projectsScreen = document.getElementById('projects-screen');
 const itemsSrceen = document.getElementById('items-screen');
+const ANIMATION_TIME = 200;
 
 msg.peerSocket.onopen = () => loadProjects();
 
@@ -42,8 +43,12 @@ msg.peerSocket.onerror = e =>
 const projectItemOnClickHandler = (textEl, item) => {
   loadProjectById(item.id, item.name);
   // Navigate to items-screen
-  projectsScreen.style.display = 'none';
-  itemsSrceen.style.display = 'inline';
+  projectsScreen.animate('disable');
+  setTimeout(() => {
+    projectsScreen.style.display = 'none';
+    itemsSrceen.style.display = 'inline';
+    itemsSrceen.animate('enable');
+  }, ANIMATION_TIME);
 };
 
 const listItemOnClickHandler = (textEl, item) => {
@@ -75,13 +80,17 @@ function configureDelegate(poolType, elements, action) {
       Object.keys(item.props).forEach(
         prop => (textEl[prop] = item.props[prop])
       );
-      if (item.id === 'footer') {
+      if (item.id === 'back-button') {
         touch.onclick = _e => {
           // Navigate to projects-screen
-          itemsSrceen.style.display = 'none';
-          projectsScreen.style.display = 'inline';
+          itemsSrceen.animate('disable');
+          setTimeout(() => {
+            itemsSrceen.style.display = 'none';
+            projectsScreen.style.display = 'inline';
+            projectsScreen.animate('enable');
+          }, ANIMATION_TIME);
         };
-      } else {
+      } else if (item.id !== 'header') {
         touch.onclick = _e => action(textEl, item);
       }
     },

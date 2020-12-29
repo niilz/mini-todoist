@@ -45,22 +45,23 @@ import {
   }
 */
 
+const HORIZONTAL_CENTER = 150;
 const headerStyles = {
   fill: 'white',
 };
 const headerProps = {
   textAnchor: 'middle',
-  x: 150,
+  x: HORIZONTAL_CENTER,
 };
 const defaultStyles = {
   fill: 'blue',
 };
-const footerStyles = {
+const backButtonStyles = {
   fill: 'green',
 };
-const footerProps = {
+const backButtonProps = {
   textAnchor: 'middle',
-  x: 150,
+  x: HORIZONTAL_CENTER,
 };
 
 msg.peerSocket.onmessage = evt => {
@@ -108,7 +109,12 @@ function sendItemsToApp(items, project) {
   viewItems = [
     { id: 'header', name: project, styles: headerStyles, props: headerProps },
     ...viewItems,
-    { id: 'footer', name: 'zurück', styles: footerStyles, props: footerProps },
+    {
+      id: 'back-button',
+      name: 'zurück',
+      styles: backButtonStyles,
+      props: backButtonProps,
+    },
   ];
 
   if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
