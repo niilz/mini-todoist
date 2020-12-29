@@ -3,8 +3,8 @@ import * as msg from 'messaging';
 
 const projectList = document.getElementById('project-list');
 const itemList = document.getElementById('item-list');
-const projectsScreen = document.getElementsByClassName('projects-screen')[0];
-const itemsSrceen = document.getElementsByClassName('items-screen')[0];
+const projectsScreen = document.getElementById('projects-screen');
+const itemsSrceen = document.getElementById('items-screen');
 
 msg.peerSocket.onopen = () => loadProjects();
 
@@ -62,23 +62,26 @@ function configureDelegate(poolType, elements, action) {
         name: element.name,
         active: true,
         styles: element.styles,
+        props: element.props,
       };
     },
     configureTile: (tile, item) => {
       const textEl = tile.getElementById('text');
       textEl.text = item.name;
       const touch = tile.getElementById('touchable');
-      if (item.id === 'header') {
-        textEl.style['fill'] = 'white';
-      } else if (item.id === 'footer') {
-        textEl.style['fill'] = 'green';
-        // Navigate to projects-screen
+      Object.keys(item.styles).forEach(
+        styleProp => (textEl.style[styleProp] = item.styles[styleProp])
+      );
+      Object.keys(item.props).forEach(
+        prop => (textEl[prop] = item.props[prop])
+      );
+      if (item.id === 'footer') {
         touch.onclick = _e => {
+          // Navigate to projects-screen
           itemsSrceen.style.display = 'none';
           projectsScreen.style.display = 'inline';
         };
       } else {
-        textEl.style['fill'] = 'blue';
         touch.onclick = _e => action(textEl, item);
       }
     },

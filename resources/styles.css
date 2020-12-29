@@ -1,17 +1,28 @@
-#text {
-  font-size: 32;
+.list-item text {
+  font-size: 28;
   font-family: System-Regular;
   font-weight: regular;
   text-length: 32;
-  fill: "red";
-}
-
-#background {
-  width: 100%;
-  height: 100%;
-  fill: #ee119a;
 }
 
 .list-item {
-  height: 80;
+  height: 70;
+}
+
+.bg {
+  x: 0;
+  y: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#project text {
+  x: 50%;
+  text-anchor: middle;
+}
+
+#touchable {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
 }

@@ -45,6 +45,24 @@ import {
   }
 */
 
+const headerStyles = {
+  fill: 'white',
+};
+const headerProps = {
+  textAnchor: 'middle',
+  x: 150,
+};
+const defaultStyles = {
+  fill: 'blue',
+};
+const footerStyles = {
+  fill: 'green',
+};
+const footerProps = {
+  textAnchor: 'middle',
+  x: 150,
+};
+
 msg.peerSocket.onmessage = evt => {
   console.log('COMP: Got request to fetch Data', evt.data);
   if (!evt.data) {
@@ -62,33 +80,39 @@ msg.peerSocket.onmessage = evt => {
 };
 
 function sendProjectsToApp(projects) {
-  console.log('APP: ITEMS', projects);
-  let simpleProjects = projects.map(({ id, name }) => {
-    return { id, name };
+  let viewProjects = projects.map(({ id, name }) => {
+    return { id, name, styles: defaultStyles, props: {} };
   });
-  simpleProjects = [
-    { id: 'header', name: 'Wähle ein Projekt' },
-    ...simpleProjects,
+  viewProjects = [
+    {
+      id: 'header',
+      name: 'Wähle ein Projekt',
+      styles: headerStyles,
+      props: headerProps,
+    },
+    ...viewProjects,
   ];
 
   if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
-    msg.peerSocket.send({ listType: 'project-list', projects: simpleProjects });
+    msg.peerSocket.send({ listType: 'project-list', projects: viewProjects });
   }
 }
 
 function sendItemsToApp(items, project) {
-  console.log('APP: ITEMS', items);
-  let simpleItems = items.map(({ id, content }) => {
-    return { id, name: content };
+  const styles = {
+    fill: 'red',
+  };
+  let viewItems = items.map(({ id, content }) => {
+    return { id, name: content, styles, props: {} };
   });
-  simpleItems = [
-    { id: 'header', name: project },
-    ...simpleItems,
-    { id: 'footer', name: 'zurück' },
+  viewItems = [
+    { id: 'header', name: project, styles: headerStyles, props: headerProps },
+    ...viewItems,
+    { id: 'footer', name: 'zurück', styles: footerStyles, props: footerProps },
   ];
 
   if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
-    msg.peerSocket.send({ listType: 'item-list', items: simpleItems });
+    msg.peerSocket.send({ listType: 'item-list', items: viewItems });
   }
 }
 
