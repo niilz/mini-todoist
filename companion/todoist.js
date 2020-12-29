@@ -29,7 +29,5 @@ export function closeTaskById(id) {
   return fetch(
     `https://api.todoist.com/rest/v1/tasks/${id}/close`,
     options('POST')
-  )
-    .then(res => res.json())
-    .catch(e => console.log(`Could not close task with id ${id} ${e}`));
+  ).catch(e => console.log(`Could not close task with id ${id} ${e}`));
 }

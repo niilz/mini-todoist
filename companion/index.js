@@ -78,8 +78,8 @@ msg.peerSocket.onmessage = evt => {
     );
   } else if (evt.data.command === 'closeTasks') {
     const closePromises = evt.data.ids.map(closeTaskById);
-    Promise.all(closePromises).then(resolvedVals =>
-      console.log('closedMsgs', resolvedVals)
+    Promise.all(closePromises).then(closeResponses =>
+      console.log('closedMsgs', closeResponses)
     );
   }
 };
