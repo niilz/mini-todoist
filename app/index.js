@@ -5,6 +5,7 @@ const projectList = document.getElementById('project-list');
 const itemList = document.getElementById('item-list');
 const projectsScreen = document.getElementById('projects-screen');
 const itemsSrceen = document.getElementById('items-screen');
+const saveScreen = document.getElementById('save-screen');
 const ANIMATION_TIME = 200;
 
 msg.peerSocket.onopen = () => loadProjects();
@@ -31,30 +32,23 @@ msg.peerSocket.onmessage = evt => {
   }
 };
 
-function loadProjects() {
-  if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
-    msg.peerSocket.send({ command: 'loadAllProjects' });
-  }
-}
-
 msg.peerSocket.onerror = e =>
   console.log(`APP: Connection-Error: ${e.code} - ${e.message}`);
 
 const projectItemOnClickHandler = (textEl, item) => {
   loadProjectById(item.id, item.name);
-  // Navigate to items-screen
-  projectsScreen.animate('disable');
-  setTimeout(() => {
-    projectsScreen.style.display = 'none';
-    itemsSrceen.style.display = 'inline';
-    itemsSrceen.animate('enable');
-  }, ANIMATION_TIME);
+  navigateFromTo(projectsScreen, itemsSrceen);
 };
 
 const listItemOnClickHandler = (textEl, item) => {
   textEl.style.fill = item.active ? 'red' : 'grey';
   item.active = !item.active;
 };
+
+document.getElementById('yes').onclick = () =>
+  navigateFromTo(saveScreen, projectsScreen);
+document.getElementById('no').onclick = () =>
+  navigateFromTo(saveScreen, itemsSrceen);
 
 function configureDelegate(poolType, elements, action) {
   return {
@@ -82,19 +76,19 @@ function configureDelegate(poolType, elements, action) {
       );
       if (item.id === 'back-button') {
         touch.onclick = _e => {
-          // Navigate to projects-screen
-          itemsSrceen.animate('disable');
-          setTimeout(() => {
-            itemsSrceen.style.display = 'none';
-            projectsScreen.style.display = 'inline';
-            projectsScreen.animate('enable');
-          }, ANIMATION_TIME);
+          navigateFromTo(itemsSrceen, saveScreen);
         };
       } else if (item.id !== 'header') {
         touch.onclick = _e => action(textEl, item);
       }
     },
   };
+}
+
+function loadProjects() {
+  if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
+    msg.peerSocket.send({ command: 'loadAllProjects' });
+  }
 }
 
 function loadProjectById(projectId, projectName) {
@@ -105,4 +99,13 @@ function loadProjectById(projectId, projectName) {
       projectName,
     });
   }
+}
+
+function navigateFromTo(from, to) {
+  from.animate('disable');
+  setTimeout(() => {
+    from.style.display = 'none';
+    to.style.display = 'inline';
+    to.animate('enable');
+  }, ANIMATION_TIME);
 }

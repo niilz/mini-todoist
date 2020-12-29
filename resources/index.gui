@@ -104,4 +104,35 @@
   <svg>
     <use id="items-screen" href="#items-screen" display="none" />
   </svg>
+
+  <!-- definition of Save-Dialog -->
+  <defs>
+    <symbol id="save-screen">
+      <animate
+        attributeName="opacity"
+        begin="enable"
+        from="0"
+        to="1"
+        dur="0.2"
+      />
+      <animate
+        attributeName="opacity"
+        begin="disable"
+        from="1"
+        to="0"
+        dur="0.2"
+      />
+      <text id="save-screen-header" class="header">Erledigte abhaken?</text>
+      <use id="yes" class="button" href="#square-button-positive" y="$">
+        <set href="#text" attributeName="text-buffer" to="Ja" />
+      </use>
+      <use id="no" class="button" href="#square-button-negative" y="$">
+        <set href="#text" attributeName="text-buffer" to="Nein" />
+      </use>
+    </symbol>
+  </defs>
+  <!-- usage of Save-Dialog -->
+  <svg>
+    <use id="save-screen" href="#save-screen" display="none" />
+  </svg>
 </svg>

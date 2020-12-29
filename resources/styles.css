@@ -26,3 +26,11 @@
   height: 100%;
   opacity: 0;
 }
+
+.header {
+  y: 20%;
+  x: 50%;
+  text-anchor: middle;
+  fill: "white";
+  width: 100%;
+}
