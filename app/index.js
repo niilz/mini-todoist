@@ -61,6 +61,7 @@ function configureDelegate(poolType, elements, action) {
         id: element.id,
         name: element.name,
         active: true,
+        styles: element.styles,
       };
     },
     configureTile: (tile, item) => {
@@ -68,15 +69,16 @@ function configureDelegate(poolType, elements, action) {
       textEl.text = item.name;
       const touch = tile.getElementById('touchable');
       if (item.id === 'header') {
-        textEl.style.fill = 'white';
+        textEl.style['fill'] = 'white';
       } else if (item.id === 'footer') {
-        textEl.style.fill = 'green';
+        textEl.style['fill'] = 'green';
         // Navigate to projects-screen
         touch.onclick = _e => {
           itemsSrceen.style.display = 'none';
           projectsScreen.style.display = 'inline';
         };
       } else {
+        textEl.style['fill'] = 'blue';
         touch.onclick = _e => action(textEl, item);
       }
     },
