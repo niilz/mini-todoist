@@ -57,6 +57,10 @@ const headerProps = {
 const defaultStyles = {
   fill: 'blue',
 };
+const defaultProps = {
+  textAnchor: 'start',
+  x: 0,
+};
 const saveButtonStyles = {
   fill: 'green',
 };
@@ -120,7 +124,7 @@ function sendTasksToApp(tasks, project) {
     fill: 'red',
   };
   let viewTasks = tasks.map(({ id, content }) => {
-    return { id, name: content, styles, props: {} };
+    return { id, name: content, styles, props: defaultProps };
   });
   viewTasks = [
     { id: 'header', name: project, styles: headerStyles, props: headerProps },
