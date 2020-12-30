@@ -24,5 +24,4 @@ const setApiToken = tokenAsJson => {
   if (msg.peerSocket.readyState === msg.peerSocket.OPEN) {
     msg.peerSocket.send({ command: 'updateToken', token: apiToken });
   }
-  console.log('stored in Settings', settingsStorage.getItem(KEY_API_TOKEN));
 };

@@ -75,7 +75,6 @@ const saveButtonProps = {
 initTokenSettings();
 
 msg.peerSocket.onmessage = evt => {
-  console.log('COMP: Got request to fetch Data', evt.data);
   if (!evt || !evt.data) {
     return;
   }
@@ -89,8 +88,8 @@ msg.peerSocket.onmessage = evt => {
     const closePromises = evt.data.ids.map(id =>
       closeTaskById(evt.data.apiToken, id)
     );
-    Promise.all(closePromises).then(closeResponses =>
-      console.log('closedMsgs', closeResponses)
+    Promise.all(closePromises).catch(e =>
+      console.log(`Could not delete all selected tasks: ${e}`)
     );
   }
 };

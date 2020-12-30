@@ -1,5 +1,6 @@
 import document from 'document';
 import * as msg from 'messaging';
+import * as fs from 'fs';
 
 const projectList = document.getElementById('project-list');
 const taskList = document.getElementById('task-list');
@@ -9,11 +10,12 @@ const saveScreen = document.getElementById('save-screen');
 const noTokenScreen = document.getElementById('no-token-screen');
 const ANIMATION_TIME = 200;
 
+const TOKEN_FILE = 'apiToken.cbor';
+const TOKEN_FILE_TYPE = 'cbor';
 let completedTaskIds = [];
-let apiToken;
+let apiToken = loadToken();
 
 msg.peerSocket.onopen = () => {
-  //TODO: check if token in File
   if (apiToken) {
     loadProjects(apiToken);
   } else {
@@ -27,7 +29,7 @@ msg.peerSocket.onmessage = evt => {
 
   if (evt.data.command === 'updateToken') {
     apiToken = evt.data.token;
-    // TODO: store token in file
+    saveToken(apiToken);
     loadProjects(apiToken);
     navigateFromTo(noTokenScreen, projectsScreen);
   }
@@ -155,4 +157,17 @@ function navigateFromTo(from, to) {
     to.style.display = 'inline';
     to.animate('enable');
   }, ANIMATION_TIME);
+}
+
+function loadToken() {
+  try {
+    let token = fs.readFileSync(TOKEN_FILE, TOKEN_FILE_TYPE);
+    return token;
+  } catch (ex) {
+    return '';
+  }
+}
+
+function saveToken(token) {
+  fs.writeFileSync(TOKEN_FILE, token, TOKEN_FILE_TYPE);
 }
