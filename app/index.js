@@ -6,6 +6,7 @@ const taskList = document.getElementById('task-list');
 const projectsScreen = document.getElementById('projects-screen');
 const tasksScreen = document.getElementById('tasks-screen');
 const saveScreen = document.getElementById('save-screen');
+const noTokenScreen = document.getElementById('no-token-screen');
 const ANIMATION_TIME = 200;
 
 let completedTaskIds = [];
@@ -13,7 +14,11 @@ let apiToken;
 
 msg.peerSocket.onopen = () => {
   //TODO: check if token in File
-  if (apiToken) loadProjects(apiToken);
+  if (apiToken) {
+    loadProjects(apiToken);
+  } else {
+    navigateFromTo(projectsScreen, noTokenScreen);
+  }
 };
 
 msg.peerSocket.onmessage = evt => {
@@ -23,6 +28,7 @@ msg.peerSocket.onmessage = evt => {
     apiToken = evt.data.token;
     // TODO: store token in file
     loadProjects(apiToken);
+    navigateFromTo(noTokenScreen, projectsScreen);
   }
   if (evt.data.listType === 'project-list') {
     projectList.delegate = configureDelegate(

@@ -34,3 +34,7 @@
   fill: "white";
   width: 100%;
 }
+
+.warning {
+  fill: "yellow";
+}

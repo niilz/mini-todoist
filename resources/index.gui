@@ -2,6 +2,7 @@
   <link rel="import" href="projects-screen.gui" />
   <link rel="import" href="tasks-screen.gui" />
   <link rel="import" href="save-screen.gui" />
+  <link rel="import" href="no-token-screen.gui" />
   <!-- usage of Projects-screen -->
   <svg>
     <use id="projects-screen" href="#projects-screen" />
@@ -15,5 +16,10 @@
   <!-- usage of Save-Dialog -->
   <svg>
     <use id="save-screen" href="#save-screen" display="none" />
+  </svg>
+
+  <!-- usage of No-Token-Message -->
+  <svg>
+    <use id="no-token-screen" href="#no-token-screen" display="none" />
   </svg>
 </svg>
