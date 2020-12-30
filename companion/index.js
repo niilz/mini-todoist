@@ -1,11 +1,10 @@
 import * as msg from 'messaging';
-import { settingsStorage } from 'settings';
-import { me as companion } from 'companion';
 import {
   fetchProjects,
   fetchTasksByProjectId,
   closeTaskById,
 } from '../companion/todoist.js';
+import { initTokenSettings } from '../companion/auth';
 
 // Todoist projects-json-structure example:
 /*
@@ -47,30 +46,6 @@ import {
   }
 */
 
-let apiToken;
-const setApiToken = token => {
-  console.log('Setting token');
-  apiToken = token;
-  if (isSocketReady()) {
-    _fetchProjects(token);
-  }
-  console.log('stored in Settings', settingsStorage.getItem(KEY_API_TOKEN));
-};
-const KEY_API_TOKEN = 'api-token';
-settingsStorage.onchange = e => {
-  console.log('Settings changed', e.key, JSON.parse(e.newValue).name);
-  if (e.key === KEY_API_TOKEN) {
-    setApiToken(JSON.parse(e.newValue).name);
-  }
-};
-if (companion.launchReasons.settingsChanged) {
-  console.log(
-    'Settings changed while offline',
-    settingsStorage.getItem(KEY_API_TOKEN)
-  );
-  setApiToken(settingsStorage.getItem(KEY_API_TOKEN));
-}
-
 const HORIZONTAL_CENTER = 150;
 const headerStyles = {
   fill: 'white',
@@ -90,23 +65,23 @@ const saveButtonProps = {
   x: HORIZONTAL_CENTER,
 };
 
+initTokenSettings();
+
 msg.peerSocket.onmessage = evt => {
   console.log('COMP: Got request to fetch Data', evt.data);
   if (!evt || !evt.data) {
     return;
   }
-  if (apiToken === undefined) {
-    console.log('No API_TOKEN set');
-    return;
-  }
   if (evt.data.command === 'loadAllProjects') {
-    _fetchProjects(apiToken);
+    _fetchProjects(evt.data.apiToken);
   } else if (evt.data.command === 'loadProjectListById') {
-    fetchTasksByProjectId(apiToken, evt.data.id).then(parsedList =>
+    fetchTasksByProjectId(evt.data.apiToken, evt.data.id).then(parsedList =>
       sendItemsToApp(parsedList, evt.data.projectName)
     );
   } else if (evt.data.command === 'closeTasks') {
-    const closePromises = evt.data.ids.map(id => closeTaskById(apiToken, id));
+    const closePromises = evt.data.ids.map(id =>
+      closeTaskById(evt.data.apiToken, id)
+    );
     Promise.all(closePromises).then(closeResponses =>
       console.log('closedMsgs', closeResponses)
     );

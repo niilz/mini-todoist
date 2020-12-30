@@ -9,11 +9,20 @@ const saveScreen = document.getElementById('save-screen');
 const ANIMATION_TIME = 200;
 
 let completedTaskIds = [];
-msg.peerSocket.onopen = () => loadProjects();
+let apiToken;
+
+msg.peerSocket.onopen = () => {
+  //TODO: check if token in File
+  if (apiToken) loadProjects(apiToken);
+};
 
 msg.peerSocket.onmessage = evt => {
-  if (!evt || !evt.data) {
-    return;
+  if (!evt || !evt.data) return;
+
+  if (evt.data.command === 'updateToken') {
+    apiToken = evt.data.token;
+    // TODO: store token in file
+    loadProjects(apiToken);
   }
   if (evt.data.listType === 'project-list') {
     projectList.delegate = configureDelegate(
@@ -36,8 +45,8 @@ msg.peerSocket.onmessage = evt => {
 msg.peerSocket.onerror = e =>
   console.log(`APP: Connection-Error: ${e.code} - ${e.message}`);
 
-const projectItemOnClickHandler = (textEl, item) => {
-  loadProjectById(item.id, item.name);
+const projectItemOnClickHandler = (_textEl, item) => {
+  loadProjectById(item.id, item.name, apiToken);
   navigateFromTo(projectsScreen, itemsSrceen);
 };
 
@@ -54,7 +63,7 @@ const listItemOnClickHandler = (textEl, item) => {
 
 document.getElementById('yes').onclick = () => {
   navigateFromTo(saveScreen, projectsScreen);
-  closeTasksById(completedTaskIds);
+  closeTasksById(completedTaskIds, apiToken);
 };
 document.getElementById('no').onclick = () =>
   navigateFromTo(saveScreen, itemsSrceen);
@@ -95,27 +104,33 @@ function configureDelegate(poolType, elements, action) {
 }
 
 const isSocketReady = () => msg.peerSocket.readyState === msg.peerSocket.OPEN;
-function loadProjects() {
+function loadProjects(apiToken) {
+  if (!apiToken) {
+    console.info('No Api-Token. Not loading any projects');
+    return;
+  }
   if (isSocketReady()) {
-    msg.peerSocket.send({ command: 'loadAllProjects' });
+    msg.peerSocket.send({ command: 'loadAllProjects', apiToken });
   }
 }
 
-function loadProjectById(projectId, projectName) {
+function loadProjectById(projectId, projectName, apiToken) {
   if (isSocketReady()) {
     msg.peerSocket.send({
       command: 'loadProjectListById',
       id: projectId,
       projectName,
+      apiToken,
     });
   }
 }
 
-function closeTasksById(taskIds) {
+function closeTasksById(taskIds, apiToken) {
   if (isSocketReady()) {
     msg.peerSocket.send({
       command: 'closeTasks',
       ids: taskIds,
+      apiToken,
     });
   }
 }
