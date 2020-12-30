@@ -1,134 +1,17 @@
 <svg>
-  <!-- Project-list-pool-item definition -->
-  <defs>
-    <symbol
-      id="project"
-      href="#tile-list-item"
-      class="list-item"
-      display="none"
-    >
-      <rect class="bg" />
-      <text id="text" />
-      <rect id="touchable" pointer-events="all" />
-    </symbol>
-  </defs>
-  <!-- Projects-Screen definition -->
-  <defs>
-    <symbol id="projects-screen">
-      <animate
-        attributeName="opacity"
-        begin="enable"
-        from="0"
-        to="1"
-        dur="0.2"
-      />
-      <animate
-        attributeName="opacity"
-        begin="disable"
-        from="1"
-        to="0"
-        dur="0.2"
-      />
-      <use id="project-list" href="#tile-list">
-        <var id="virtual" value="1" />
-        <use id="project-pool" href="#tile-list-pool">
-          <use id="project-pool[0]" href="#project" />
-          <use id="project-pool[1]" href="#project" />
-          <use id="project-pool[3]" href="#project" />
-          <use id="project-pool[4]" href="#project" />
-          <use id="project-pool[5]" href="#project" />
-          <use id="project-pool[6]" href="#project" />
-          <use id="project-pool[7]" href="#project" />
-          <use id="project-pool[8]" href="#project" />
-          <use id="project-pool[9]" href="#project" />
-        </use>
-      </use>
-    </symbol>
-  </defs>
+  <link rel="import" href="projects-screen.gui" />
+  <link rel="import" href="tasks-screen.gui" />
+  <link rel="import" href="save-screen.gui" />
   <!-- usage of Projects-screen -->
   <svg>
     <use id="projects-screen" href="#projects-screen" />
   </svg>
 
-  <!-- Item-list-pool definition -->
-  <defs>
-    <symbol
-      id="list-item"
-      href="#tile-list-item"
-      class="list-item task"
-      display="none"
-    >
-      <rect class="bg" />
-      <text id="text" />
-      <rect id="touchable" pointer-events="all" />
-    </symbol>
-  </defs>
-
-  <!-- Items-Screen definition -->
-  <defs>
-    <symbol id="items-screen">
-      <animate
-        attributeName="opacity"
-        begin="enable"
-        from="0"
-        to="1"
-        dur="0.2"
-      />
-      <animate
-        attributeName="opacity"
-        begin="disable"
-        from="1"
-        to="0"
-        dur="0.2"
-      />
-      <use id="item-list" href="#tile-list">
-        <var id="virtual" value="1" />
-        <use id="item-pool" href="#tile-list-pool">
-          <use id="item-pool[0]" href="#list-item" />
-          <use id="item-pool[1]" href="#list-item" />
-          <use id="item-pool[2]" href="#list-item" />
-          <use id="item-pool[3]" href="#list-item" />
-          <use id="item-pool[4]" href="#list-item" />
-          <use id="item-pool[5]" href="#list-item" />
-          <use id="item-pool[6]" href="#list-item" />
-          <use id="item-pool[7]" href="#list-item" />
-          <use id="item-pool[8]" href="#list-item" />
-          <use id="item-pool[9]" href="#list-item" />
-        </use>
-      </use>
-    </symbol>
-  </defs>
   <!-- usage of items-screen -->
   <svg>
-    <use id="items-screen" href="#items-screen" display="none" />
+    <use id="tasks-screen" href="#tasks-screen" display="none" />
   </svg>
 
-  <!-- definition of Save-Dialog -->
-  <defs>
-    <symbol id="save-screen">
-      <animate
-        attributeName="opacity"
-        begin="enable"
-        from="0"
-        to="1"
-        dur="0.2"
-      />
-      <animate
-        attributeName="opacity"
-        begin="disable"
-        from="1"
-        to="0"
-        dur="0.2"
-      />
-      <text id="save-screen-header" class="header">Erledigte abhaken?</text>
-      <use id="yes" class="button" href="#square-button-positive" y="$">
-        <set href="#text" attributeName="text-buffer" to="Ja" />
-      </use>
-      <use id="no" class="button" href="#square-button-negative" y="$">
-        <set href="#text" attributeName="text-buffer" to="Nein" />
-      </use>
-    </symbol>
-  </defs>
   <!-- usage of Save-Dialog -->
   <svg>
     <use id="save-screen" href="#save-screen" display="none" />

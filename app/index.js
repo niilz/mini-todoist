@@ -2,9 +2,9 @@ import document from 'document';
 import * as msg from 'messaging';
 
 const projectList = document.getElementById('project-list');
-const itemList = document.getElementById('item-list');
+const taskList = document.getElementById('task-list');
 const projectsScreen = document.getElementById('projects-screen');
-const itemsSrceen = document.getElementById('items-screen');
+const tasksScreen = document.getElementById('tasks-screen');
 const saveScreen = document.getElementById('save-screen');
 const ANIMATION_TIME = 200;
 
@@ -28,37 +28,37 @@ msg.peerSocket.onmessage = evt => {
     projectList.delegate = configureDelegate(
       'project-pool',
       evt.data.projects,
-      projectItemOnClickHandler
+      projectOnClickHandler
     );
     projectList.length = evt.data.projects.length;
   }
-  if (evt.data.listType === 'item-list') {
-    itemList.delegate = configureDelegate(
-      'item-pool',
-      evt.data.items,
-      listItemOnClickHandler
+  if (evt.data.listType === 'task-list') {
+    taskList.delegate = configureDelegate(
+      'task-pool',
+      evt.data.tasks,
+      taskOnClickHandler
     );
-    itemList.length = evt.data.items.length;
+    taskList.length = evt.data.tasks.length;
   }
 };
 
 msg.peerSocket.onerror = e =>
   console.log(`APP: Connection-Error: ${e.code} - ${e.message}`);
 
-const projectItemOnClickHandler = (_textEl, item) => {
-  loadProjectById(item.id, item.name, apiToken);
-  navigateFromTo(projectsScreen, itemsSrceen);
+const projectOnClickHandler = (_textEl, project) => {
+  loadProjectById(project.id, project.name, apiToken);
+  navigateFromTo(projectsScreen, tasksScreen);
 };
 
-const listItemOnClickHandler = (textEl, item) => {
-  if (item.active) {
+const taskOnClickHandler = (textEl, task) => {
+  if (task.active) {
     textEl.style.fill = 'grey';
-    completedTaskIds.push(item.id);
+    completedTaskIds.push(task.id);
   } else {
     textEl.style.fill = 'red';
-    completedTaskIds = completedTaskIds.filter(id => id !== item.id);
+    completedTaskIds = completedTaskIds.filter(id => id !== task.id);
   }
-  item.active = !item.active;
+  task.active = !task.active;
 };
 
 document.getElementById('yes').onclick = () => {
@@ -66,7 +66,7 @@ document.getElementById('yes').onclick = () => {
   closeTasksById(completedTaskIds, apiToken);
 };
 document.getElementById('no').onclick = () =>
-  navigateFromTo(saveScreen, itemsSrceen);
+  navigateFromTo(saveScreen, tasksScreen);
 
 function configureDelegate(poolType, elements, action) {
   return {
@@ -94,7 +94,7 @@ function configureDelegate(poolType, elements, action) {
       );
       if (item.id === 'save-button') {
         touch.onclick = _e => {
-          navigateFromTo(itemsSrceen, saveScreen);
+          navigateFromTo(tasksScreen, saveScreen);
         };
       } else if (item.id !== 'header') {
         touch.onclick = _e => action(textEl, item);
@@ -117,7 +117,7 @@ function loadProjects(apiToken) {
 function loadProjectById(projectId, projectName, apiToken) {
   if (isSocketReady()) {
     msg.peerSocket.send({
-      command: 'loadProjectListById',
+      command: 'loadTasksForProjectId',
       id: projectId,
       projectName,
       apiToken,

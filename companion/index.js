@@ -18,7 +18,7 @@ import { initTokenSettings } from '../companion/auth';
     sync_id: 0,
     inbox_project: true
   },
-// Todoist listItem-json-structure example:
+// Todoist taskItem-json-structure example:
   {
     "assignee": 1
     "comment_count": 10,
@@ -74,9 +74,9 @@ msg.peerSocket.onmessage = evt => {
   }
   if (evt.data.command === 'loadAllProjects') {
     _fetchProjects(evt.data.apiToken);
-  } else if (evt.data.command === 'loadProjectListById') {
+  } else if (evt.data.command === 'loadTasksForProjectId') {
     fetchTasksByProjectId(evt.data.apiToken, evt.data.id).then(parsedList =>
-      sendItemsToApp(parsedList, evt.data.projectName)
+      sendTasksToApp(parsedList, evt.data.projectName)
     );
   } else if (evt.data.command === 'closeTasks') {
     const closePromises = evt.data.ids.map(id =>
@@ -115,16 +115,16 @@ function sendProjectsToApp(projects) {
   }
 }
 
-function sendItemsToApp(items, project) {
+function sendTasksToApp(tasks, project) {
   const styles = {
     fill: 'red',
   };
-  let viewItems = items.map(({ id, content }) => {
+  let viewTasks = tasks.map(({ id, content }) => {
     return { id, name: content, styles, props: {} };
   });
-  viewItems = [
+  viewTasks = [
     { id: 'header', name: project, styles: headerStyles, props: headerProps },
-    ...viewItems,
+    ...viewTasks,
     {
       id: 'save-button',
       name: 'speichern',
@@ -134,7 +134,7 @@ function sendItemsToApp(items, project) {
   ];
 
   if (isSocketReady()) {
-    msg.peerSocket.send({ listType: 'item-list', items: viewItems });
+    msg.peerSocket.send({ listType: 'task-list', tasks: viewTasks });
   }
 }
 
