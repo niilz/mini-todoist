@@ -46,7 +46,10 @@ import { initTokenSettings } from '../companion/auth';
   }
 */
 
+const MAX_BYTE_SIZE = 1024;
 const HORIZONTAL_CENTER = 150;
+let encoder = new TextEncoder();
+
 const headerStyles = {
   fill: 'white',
 };
@@ -138,8 +141,38 @@ function sendTasksToApp(tasks, project) {
   ];
 
   if (isSocketReady()) {
-    msg.peerSocket.send({ listType: 'task-list', tasks: viewTasks });
+    let toSend = [];
+    while (viewTasks.length > 0) {
+      if (canAddNextItem(toSend, viewTasks[0])) {
+        toSend.push(viewTasks.shift());
+      } else {
+        msg.peerSocket.send({
+          listType: 'task-list',
+          tasks: toSend,
+          done: false,
+        });
+        toSend = [];
+      }
+    }
+    msg.peerSocket.send({
+      listType: 'task-list',
+      tasks: toSend,
+      done: true,
+    });
   }
+}
+
+function canAddNextItem(currentData, nextItem) {
+  const nextByteSize = getByteSize(currentData) + getByteSize(nextItem);
+  return nextByteSize < MAX_BYTE_SIZE;
+}
+
+function getByteSize(element) {
+  if (encoder === undefined) {
+    encoder = new TextEncoder();
+  }
+  let elementAsUint8Array = encoder.encode(JSON.stringify(element));
+  return elementAsUint8Array.length;
 }
 
 msg.peerSocket.onerror = e =>

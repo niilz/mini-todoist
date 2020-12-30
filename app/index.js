@@ -21,6 +21,7 @@ msg.peerSocket.onopen = () => {
   }
 };
 
+let taskBuffer = [];
 msg.peerSocket.onmessage = evt => {
   if (!evt || !evt.data) return;
 
@@ -39,12 +40,18 @@ msg.peerSocket.onmessage = evt => {
     projectList.length = evt.data.projects.length;
   }
   if (evt.data.listType === 'task-list') {
-    taskList.delegate = configureDelegate(
-      'task-pool',
-      evt.data.tasks,
-      taskOnClickHandler
-    );
-    taskList.length = evt.data.tasks.length;
+    if (evt.data.done) {
+      let tasksToDisplay = taskBuffer.concat(evt.data.tasks);
+      taskList.delegate = configureDelegate(
+        'task-pool',
+        tasksToDisplay,
+        taskOnClickHandler
+      );
+      taskList.length = tasksToDisplay.length;
+      taskBuffer = [];
+    } else {
+      taskBuffer = taskBuffer.concat(evt.data.tasks);
+    }
   }
 };
 
