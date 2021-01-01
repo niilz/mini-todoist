@@ -47,7 +47,9 @@ import { initTokenSettings } from '../companion/auth';
 */
 
 const MAX_BYTE_SIZE = 1024;
-const HORIZONTAL_CENTER = 150;
+const DEVICE_WIDTH = 300;
+const TILE_HEIGHT = 65;
+const percentOf = (percentage, relativeMax) => (percentage * relativeMax) / 100;
 let encoder = new TextEncoder();
 
 const headerStyles = {
@@ -55,28 +57,28 @@ const headerStyles = {
 };
 const headerProps = {
   textAnchor: 'middle',
-  x: HORIZONTAL_CENTER,
+  x: percentOf(50, DEVICE_WIDTH),
 };
 const projectStyles = {
   fill: 'blue',
 };
 const projectProps = {
   textAnchor: 'middle',
-  x: HORIZONTAL_CENTER,
+  x: percentOf(50, DEVICE_WIDTH),
 };
 const taskStyles = {
   fill: 'red',
 };
 const taskProps = {
   textAnchor: 'start',
-  x: 15,
+  x: percentOf(15, DEVICE_WIDTH),
 };
 const doneButtonStyles = {
   fill: 'green',
 };
 const doneButtonProps = {
   textAnchor: 'middle',
-  x: HORIZONTAL_CENTER,
+  x: percentOf(50, DEVICE_WIDTH),
 };
 
 initTokenSettings();
