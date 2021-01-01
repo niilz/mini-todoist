@@ -54,6 +54,7 @@ let encoder = new TextEncoder();
 
 const headerStyles = {
   fill: 'white',
+  fontFamily: 'Fabrikat-Black',
 };
 const headerProps = {
   textAnchor: 'middle',
@@ -61,6 +62,7 @@ const headerProps = {
 };
 const projectStyles = {
   fill: 'blue',
+  fontFamily: 'Seville-Regular',
 };
 const projectProps = {
   textAnchor: 'middle',
@@ -68,6 +70,7 @@ const projectProps = {
 };
 const taskStyles = {
   fill: 'red',
+  fontFamily: 'Seville-Condensed',
 };
 const taskProps = {
   textAnchor: 'start',
@@ -75,6 +78,7 @@ const taskProps = {
 };
 const doneButtonStyles = {
   fill: 'green',
+  fontFamily: 'Tungsten-Medium',
 };
 const doneButtonProps = {
   textAnchor: 'middle',
