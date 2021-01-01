@@ -84,6 +84,24 @@ const doneButtonProps = {
   textAnchor: 'middle',
   x: percentOf(50, DEVICE_WIDTH),
 };
+const bgStyles = {
+  fill: 'black',
+};
+const bgProps = {
+  x: 0,
+  y: 0,
+  width: DEVICE_WIDTH,
+  height: TILE_HEIGHT,
+};
+const buttonBgStyles = {
+  fill: 'yellow',
+};
+const buttonBgProps = {
+  x: percentOf(15, DEVICE_WIDTH),
+  y: percentOf(5, TILE_HEIGHT),
+  width: percentOf(70, DEVICE_WIDTH),
+  height: percentOf(70, TILE_HEIGHT),
+};
 
 initTokenSettings();
 
@@ -117,7 +135,14 @@ function _fetchProjects(apiToken) {
 
 function sendProjectsToApp(projects) {
   let viewProjects = projects.map(({ id, name }) => {
-    return { id, name, styles: projectStyles, props: projectProps };
+    return {
+      id,
+      name,
+      styles: projectStyles,
+      props: projectProps,
+      bgStyles: bgStyles,
+      bgProps: bgProps,
+    };
   });
   viewProjects = [
     {
@@ -125,6 +150,8 @@ function sendProjectsToApp(projects) {
       name: 'Wähle ein Projekt',
       styles: headerStyles,
       props: headerProps,
+      bgStyles: bgStyles,
+      bgProps: bgProps,
     },
     ...viewProjects,
   ];
@@ -136,16 +163,32 @@ function sendProjectsToApp(projects) {
 
 function sendTasksToApp(tasks, project) {
   let viewTasks = tasks.map(({ id, content }) => {
-    return { id, name: content, styles: taskStyles, props: taskProps };
+    return {
+      id,
+      name: content,
+      styles: taskStyles,
+      props: taskProps,
+      bgStyles: bgStyles,
+      bgProps: bgProps,
+    };
   });
   viewTasks = [
-    { id: 'header', name: project, styles: headerStyles, props: headerProps },
+    {
+      id: 'header',
+      name: project,
+      styles: headerStyles,
+      props: headerProps,
+      bgStyles: bgStyles,
+      bgProps: bgProps,
+    },
     ...viewTasks,
     {
       id: 'done-button',
       name: 'fertig',
       styles: doneButtonStyles,
       props: doneButtonProps,
+      bgStyles: buttonBgStyles,
+      bgProps: buttonBgProps,
     },
   ];
 

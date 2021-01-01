@@ -107,6 +107,8 @@ function configureDelegate(poolType, elements, action) {
         active: true,
         styles: element.styles,
         props: element.props,
+        bgStyles: element.bgStyles,
+        bgProps: element.bgProps,
       };
     },
     configureTile: (tile, item) => {
@@ -118,6 +120,14 @@ function configureDelegate(poolType, elements, action) {
       );
       Object.keys(item.props).forEach(
         prop => (textEl[prop] = item.props[prop])
+      );
+      const bg = tile.getElementsByClassName('bg')[0];
+      Object.keys(item.bgStyles).forEach(
+        bgStyle =>
+          bg.style[bgStyle] = item.bgStyles[bgStyle]
+      );
+      Object.keys(item.bgProps).forEach(
+        bgProp => bg[bgProp] = item.bgProps[bgProp]
       );
       if (item.id === 'done-button') {
         touch.onclick = _e => {
