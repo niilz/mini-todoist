@@ -3,6 +3,7 @@ import * as msg from 'messaging';
 import { Messenger } from '../app/messenger';
 import { Navigator } from '../app/navigator';
 import { Settings } from '../app/settings';
+import {TASK_COMPLETED_COLOR, TASK_COLOR} from '../resources/constants';
 
 const projectList = document.getElementById('project-list');
 const taskList = document.getElementById('task-list');
@@ -73,10 +74,12 @@ const projectOnClickHandler = (_textEl, project) => {
 
 const taskOnClickHandler = (textEl, task) => {
   if (task.active) {
-    textEl.style.fill = 'grey';
+    // Mark task as completed
+    textEl.style.fill = TASK_COMPLETED_COLOR;
     completedTaskIds.push(task.id);
   } else {
-    textEl.style.fill = 'red';
+    // Mark task as uncompleted
+    textEl.style.fill = TASK_COLOR;
     completedTaskIds = completedTaskIds.filter(id => id !== task.id);
   }
   task.active = !task.active;

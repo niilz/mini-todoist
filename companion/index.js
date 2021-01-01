@@ -5,6 +5,16 @@ import {
   closeTaskById,
 } from '../companion/todoist.js';
 import { initTokenSettings } from '../companion/auth';
+import {
+  TASK_COLOR,
+  PROJECT_COLOR,
+  HEADER_COLOR,
+  BUTTON_COLOR,
+  BG_COLOR,
+  TILE_HEIGHT,
+  DEVICE_WIDTH,
+  MAX_BYTE_SIZE,
+} from '../resources/constants.js';
 
 // Todoist projects-json-structure example:
 /*
@@ -46,14 +56,11 @@ import { initTokenSettings } from '../companion/auth';
   }
 */
 
-const MAX_BYTE_SIZE = 1024;
-const DEVICE_WIDTH = 300;
-const TILE_HEIGHT = 65;
 const percentOf = (percentage, relativeMax) => (percentage * relativeMax) / 100;
 let encoder = new TextEncoder();
 
 const headerStyles = {
-  fill: 'white',
+  fill: HEADER_COLOR,
   fontFamily: 'Fabrikat-Black',
 };
 const headerProps = {
@@ -61,7 +68,7 @@ const headerProps = {
   x: percentOf(50, DEVICE_WIDTH),
 };
 const projectStyles = {
-  fill: 'blue',
+  fill: PROJECT_COLOR,
   fontFamily: 'Seville-Regular',
 };
 const projectProps = {
@@ -69,7 +76,7 @@ const projectProps = {
   x: percentOf(50, DEVICE_WIDTH),
 };
 const taskStyles = {
-  fill: 'red',
+  fill: TASK_COLOR,
   fontFamily: 'Seville-Condensed',
 };
 const taskProps = {
@@ -77,7 +84,7 @@ const taskProps = {
   x: percentOf(15, DEVICE_WIDTH),
 };
 const doneButtonStyles = {
-  fill: 'green',
+  fill: BG_COLOR,
   fontFamily: 'Tungsten-Medium',
 };
 const doneButtonProps = {
@@ -85,7 +92,7 @@ const doneButtonProps = {
   x: percentOf(50, DEVICE_WIDTH),
 };
 const bgStyles = {
-  fill: 'black',
+  fill: BG_COLOR,
 };
 const bgProps = {
   x: 0,
@@ -94,13 +101,13 @@ const bgProps = {
   height: TILE_HEIGHT,
 };
 const buttonBgStyles = {
-  fill: 'yellow',
+  fill: BUTTON_COLOR,
 };
 const buttonBgProps = {
-  x: percentOf(15, DEVICE_WIDTH),
-  y: percentOf(5, TILE_HEIGHT),
-  width: percentOf(70, DEVICE_WIDTH),
-  height: percentOf(70, TILE_HEIGHT),
+  x: percentOf(25, DEVICE_WIDTH),
+  y: percentOf(15, TILE_HEIGHT),
+  width: percentOf(50, DEVICE_WIDTH),
+  height: percentOf(85, TILE_HEIGHT),
 };
 
 initTokenSettings();
