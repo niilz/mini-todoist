@@ -15,11 +15,11 @@ Settings.prototype.getApiToken = function () {
 
 Settings.prototype.setApiToken = function (token) {
   this.apiToken = token;
-  this._saveApiToken(this.apiToken);
+  this._saveApiToken();
 };
 
 Settings.prototype._loadToken = function () {
-  fs.readFileSync(this.TOKEN_FILE, TOKEN_FILE_TYPE);
+  return fs.readFileSync(this.TOKEN_FILE, this.TOKEN_FILE_TYPE);
 };
 
 Settings.prototype._saveApiToken = function () {
