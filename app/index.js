@@ -12,6 +12,7 @@ const saveScreen = document.getElementById('save-screen');
 const noTokenScreen = document.getElementById('no-token-screen');
 
 let completedTaskIds = [];
+let tasksToDisplay = [];
 
 const messenger;
 const navigator = new Navigator(projectsScreen);
@@ -49,7 +50,7 @@ msg.peerSocket.onmessage = evt => {
   }
   if (evt.data.listType === 'task-list') {
     if (evt.data.done) {
-      let tasksToDisplay = taskBuffer.concat(evt.data.tasks);
+      tasksToDisplay = taskBuffer.concat(evt.data.tasks);
       taskList.delegate = configureDelegate(
         'task-pool',
         tasksToDisplay,
@@ -84,6 +85,7 @@ const taskOnClickHandler = (textEl, task) => {
 
 document.getElementById('yes').onclick = () => {
   navigator.navigateTo(projectsScreen);
+  tasksToDisplay = [];
   messenger.closeTasksById(completedTaskIds);
 };
 document.getElementById('no').onclick = () =>

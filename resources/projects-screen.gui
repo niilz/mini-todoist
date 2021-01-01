@@ -32,6 +32,8 @@
       />
       <use id="project-list" href="#tile-list">
         <var id="virtual" value="1" />
+        <var id="reorder-enabled" value="0" />
+        <var id="peek-enabled" value="0" />
         <use id="project-pool" href="#tile-list-pool">
           <use id="project-pool[0]" href="#project" />
           <use id="project-pool[1]" href="#project" />
