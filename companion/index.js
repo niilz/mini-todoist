@@ -71,10 +71,10 @@ const taskProps = {
   textAnchor: 'start',
   x: 15,
 };
-const saveButtonStyles = {
+const doneButtonStyles = {
   fill: 'green',
 };
-const saveButtonProps = {
+const doneButtonProps = {
   textAnchor: 'middle',
   x: HORIZONTAL_CENTER,
 };
@@ -136,10 +136,10 @@ function sendTasksToApp(tasks, project) {
     { id: 'header', name: project, styles: headerStyles, props: headerProps },
     ...viewTasks,
     {
-      id: 'save-button',
-      name: 'speichern',
-      styles: saveButtonStyles,
-      props: saveButtonProps,
+      id: 'done-button',
+      name: 'fertig',
+      styles: doneButtonStyles,
+      props: doneButtonProps,
     },
   ];
 

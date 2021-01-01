@@ -120,7 +120,7 @@ function configureDelegate(poolType, elements, action) {
       Object.keys(item.props).forEach(
         prop => (textEl[prop] = item.props[prop])
       );
-      if (item.id === 'save-button') {
+      if (item.id === 'done-button') {
         touch.onclick = _e => {
           navigator.navigateTo(saveScreen);
         };
