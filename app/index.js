@@ -14,31 +14,6 @@ const noTokenScreen = document.getElementById('no-token-screen');
 let completedTaskIds = [];
 let tasksToDisplay = [];
 
-let header = {
-  id: `header`,
-  name: `Header!`,
-  styles: {fill: 'white'},
-  props: {textAnchor: 'middle', x: 150},
-};
-let footer = {
-  id: `footer`,
-  name: `Footer!`,
-  styles: {fill: 'green'},
-  props: {textAnchor: 'middle', x: 150},
-};
-let fakeTasks = new Array(20);
-for (let idx = 0; idx < fakeTasks.length; idx++) {
-  fakeTasks[idx] = {
-    id: `task_${idx}`,
-    name: `Task Nr. ${idx + 1}`,
-    styles: {fill: 'red'},
-    props: {textAnchor: 'start', x: 10},
-  };
-}
-fakeTasks = [header, ...fakeTasks, footer];
-
-console.log(`fakeTaks ${fakeTasks}`)
-
 const messenger;
 const navigator = new Navigator(projectsScreen);
 const settings = new Settings();
@@ -78,13 +53,11 @@ msg.peerSocket.onmessage = evt => {
       tasksToDisplay = taskBuffer.concat(evt.data.tasks);
       taskList.delegate = configureDelegate(
         'task-pool',
-        //tasksToDisplay,
-        fakeTasks,
+        tasksToDisplay,
         taskOnClickHandler
       );
       console.log(`setting tasksToDisplay. length: ${tasksToDisplay.length}`)
-      //taskList.length = tasksToDisplay.length;
-      taskList.length = fakeTasks.length;
+      taskList.length = tasksToDisplay.length;
     } else {
       console.log(`setting tasksToDisplay. length: ${tasksToDisplay.length}`)
       taskBuffer = taskBuffer.concat(evt.data.tasks);
@@ -124,6 +97,7 @@ document.getElementById('no').onclick = () =>
 
 
 function configureDelegate(poolType, elements, action) {
+  elements.forEach(el => console.log(el.name))
   return {
     getTileInfo: idx => {
       const element = elements[idx];
