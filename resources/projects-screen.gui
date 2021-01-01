@@ -10,6 +10,7 @@
       <rect class="bg" />
       <text id="text" />
       <rect id="touchable" pointer-events="all" />
+      <rect class="line" />
     </symbol>
   </defs>
   <!-- Projects-Screen definition -->
