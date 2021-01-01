@@ -1,6 +1,8 @@
 import document from 'document';
 import * as msg from 'messaging';
-import * as fs from 'fs';
+import { Messenger } from '../app/messenger';
+import { Navigator } from '../app/navigator';
+import { Settings } from '../app/settings';
 
 const projectList = document.getElementById('project-list');
 const taskList = document.getElementById('task-list');
@@ -8,18 +10,20 @@ const projectsScreen = document.getElementById('projects-screen');
 const tasksScreen = document.getElementById('tasks-screen');
 const saveScreen = document.getElementById('save-screen');
 const noTokenScreen = document.getElementById('no-token-screen');
-const ANIMATION_TIME = 200;
 
-const TOKEN_FILE = 'apiToken.cbor';
-const TOKEN_FILE_TYPE = 'cbor';
 let completedTaskIds = [];
-let apiToken = loadToken();
+
+const messenger;
+const navigator = new Navigator(projectsScreen);
+const settings = new Settings();
 
 msg.peerSocket.onopen = () => {
-  if (apiToken) {
-    loadProjects(apiToken);
-  } else {
-    navigateFromTo(projectsScreen, noTokenScreen);
+  try {
+    const apiToken = settings.getApiToken();
+    messenger = new Messenger(apiToken);
+    messenger.loadProjects();
+  } catch (ex) {
+    navigator.navigateTo(noTokenScreen);
   }
 };
 
@@ -28,10 +32,12 @@ msg.peerSocket.onmessage = evt => {
   if (!evt || !evt.data) return;
 
   if (evt.data.command === 'updateToken') {
-    apiToken = evt.data.token;
-    saveToken(apiToken);
-    loadProjects(apiToken);
-    navigateFromTo(noTokenScreen, projectsScreen);
+    settings.setApiToken(evt.data.token);
+    if (messenger === undefined) {
+      messenger = new Messenger(evt.data.token);
+    }
+    messenger.loadProjects();
+    navigator.navigateTo(projectsScreen);
   }
   if (evt.data.listType === 'project-list') {
     projectList.delegate = configureDelegate(
@@ -61,8 +67,8 @@ msg.peerSocket.onerror = e =>
   console.log(`APP: Connection-Error: ${e.code} - ${e.message}`);
 
 const projectOnClickHandler = (_textEl, project) => {
-  loadProjectById(project.id, project.name, apiToken);
-  navigateFromTo(projectsScreen, tasksScreen);
+  messenger.loadProjectById(project.id, project.name);
+  navigator.navigateTo(tasksScreen);
 };
 
 const taskOnClickHandler = (textEl, task) => {
@@ -77,11 +83,11 @@ const taskOnClickHandler = (textEl, task) => {
 };
 
 document.getElementById('yes').onclick = () => {
-  navigateFromTo(saveScreen, projectsScreen);
-  closeTasksById(completedTaskIds, apiToken);
+  navigator.navigateTo(projectsScreen);
+  messenger.closeTasksById(completedTaskIds);
 };
 document.getElementById('no').onclick = () =>
-  navigateFromTo(saveScreen, tasksScreen);
+  navigator.navigateTo(tasksScreen);
 
 function configureDelegate(poolType, elements, action) {
   return {
@@ -109,65 +115,11 @@ function configureDelegate(poolType, elements, action) {
       );
       if (item.id === 'save-button') {
         touch.onclick = _e => {
-          navigateFromTo(tasksScreen, saveScreen);
+          navigator.navigateTo(saveScreen);
         };
       } else if (item.id !== 'header') {
         touch.onclick = _e => action(textEl, item);
       }
     },
   };
-}
-
-const isSocketReady = () => msg.peerSocket.readyState === msg.peerSocket.OPEN;
-function loadProjects(apiToken) {
-  if (!apiToken) {
-    console.info('No Api-Token. Not loading any projects');
-    return;
-  }
-  if (isSocketReady()) {
-    msg.peerSocket.send({ command: 'loadAllProjects', apiToken });
-  }
-}
-
-function loadProjectById(projectId, projectName, apiToken) {
-  if (isSocketReady()) {
-    msg.peerSocket.send({
-      command: 'loadTasksForProjectId',
-      id: projectId,
-      projectName,
-      apiToken,
-    });
-  }
-}
-
-function closeTasksById(taskIds, apiToken) {
-  if (isSocketReady()) {
-    msg.peerSocket.send({
-      command: 'closeTasks',
-      ids: taskIds,
-      apiToken,
-    });
-  }
-}
-
-function navigateFromTo(from, to) {
-  from.animate('disable');
-  setTimeout(() => {
-    from.style.display = 'none';
-    to.style.display = 'inline';
-    to.animate('enable');
-  }, ANIMATION_TIME);
-}
-
-function loadToken() {
-  try {
-    let token = fs.readFileSync(TOKEN_FILE, TOKEN_FILE_TYPE);
-    return token;
-  } catch (ex) {
-    return '';
-  }
-}
-
-function saveToken(token) {
-  fs.writeFileSync(TOKEN_FILE, token, TOKEN_FILE_TYPE);
 }
