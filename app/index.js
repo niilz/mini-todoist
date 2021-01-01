@@ -14,6 +14,31 @@ const noTokenScreen = document.getElementById('no-token-screen');
 let completedTaskIds = [];
 let tasksToDisplay = [];
 
+let header = {
+  id: `header`,
+  name: `Header!`,
+  styles: {fill: 'white'},
+  props: {textAnchor: 'middle', x: 150},
+};
+let footer = {
+  id: `footer`,
+  name: `Footer!`,
+  styles: {fill: 'green'},
+  props: {textAnchor: 'middle', x: 150},
+};
+let fakeTasks = new Array(20);
+for (let idx = 0; idx < fakeTasks.length; idx++) {
+  fakeTasks[idx] = {
+    id: `task_${idx}`,
+    name: `Task Nr. ${idx + 1}`,
+    styles: {fill: 'red'},
+    props: {textAnchor: 'start', x: 10},
+  };
+}
+fakeTasks = [header, ...fakeTasks, footer];
+
+console.log(`fakeTaks ${fakeTasks}`)
+
 const messenger;
 const navigator = new Navigator(projectsScreen);
 const settings = new Settings();
@@ -53,12 +78,15 @@ msg.peerSocket.onmessage = evt => {
       tasksToDisplay = taskBuffer.concat(evt.data.tasks);
       taskList.delegate = configureDelegate(
         'task-pool',
-        tasksToDisplay,
+        //tasksToDisplay,
+        fakeTasks,
         taskOnClickHandler
       );
-      taskList.length = tasksToDisplay.length;
-      taskBuffer = [];
+      console.log(`setting tasksToDisplay. length: ${tasksToDisplay.length}`)
+      //taskList.length = tasksToDisplay.length;
+      taskList.length = fakeTasks.length;
     } else {
+      console.log(`setting tasksToDisplay. length: ${tasksToDisplay.length}`)
       taskBuffer = taskBuffer.concat(evt.data.tasks);
     }
   }
@@ -85,16 +113,21 @@ const taskOnClickHandler = (textEl, task) => {
 
 document.getElementById('yes').onclick = () => {
   navigator.navigateTo(projectsScreen);
+  console.log(`setting tasksToDisplay. length: ${tasksToDisplay.length}`)
   tasksToDisplay = [];
+  taskBuffer = [];
+  console.log(`setting tasksToDisplay. length: ${tasksToDisplay.length}`)
   messenger.closeTasksById(completedTaskIds);
 };
 document.getElementById('no').onclick = () =>
   navigator.navigateTo(tasksScreen);
 
+
 function configureDelegate(poolType, elements, action) {
   return {
     getTileInfo: idx => {
       const element = elements[idx];
+      console.log(`element ${element}`)
       return {
         type: poolType,
         index: idx,

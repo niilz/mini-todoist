@@ -46,6 +46,11 @@
           <use id="task-pool[7]" href="#task" />
           <use id="task-pool[8]" href="#task" />
           <use id="task-pool[9]" href="#task" />
+          <use id="task-pool[10]" href="#task" />
+          <use id="task-pool[11]" href="#task" />
+          <use id="task-pool[12]" href="#task" />
+          <use id="task-pool[13]" href="#task" />
+          <use id="task-pool[14]" href="#task" />
         </use>
       </use>
     </symbol>
