@@ -86,11 +86,10 @@ const taskOnClickHandler = (textEl, task) => {
 
 document.getElementById('yes').onclick = () => {
   navigator.navigateTo(projectsScreen);
-  console.log(`setting tasksToDisplay. length: ${tasksToDisplay.length}`)
   tasksToDisplay = [];
   taskBuffer = [];
-  console.log(`setting tasksToDisplay. length: ${tasksToDisplay.length}`)
   messenger.closeTasksById(completedTaskIds);
+  completedTaskIds = [];
 };
 document.getElementById('no').onclick = () =>
   navigator.navigateTo(tasksScreen);
@@ -122,7 +121,13 @@ function configureDelegate(poolType, elements, action) {
       );
       if (item.id === 'done-button') {
         touch.onclick = _e => {
-          navigator.navigateTo(saveScreen);
+          if (completedTaskIds.length > 0) {
+            navigator.navigateTo(saveScreen);
+          } else {
+            navigator.navigateTo(projectsScreen);
+            tasksToDisplay = [];
+            taskBuffer = [];
+          }
         };
       } else if (item.id !== 'header') {
         touch.onclick = _e => action(textEl, item);
