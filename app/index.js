@@ -56,10 +56,8 @@ msg.peerSocket.onmessage = evt => {
         tasksToDisplay,
         taskOnClickHandler
       );
-      console.log(`setting tasksToDisplay. length: ${tasksToDisplay.length}`)
       taskList.length = tasksToDisplay.length;
     } else {
-      console.log(`setting tasksToDisplay. length: ${tasksToDisplay.length}`)
       taskBuffer = taskBuffer.concat(evt.data.tasks);
     }
   }
@@ -112,23 +110,12 @@ function configureDelegate(poolType, elements, action) {
       };
     },
     configureTile: (tile, item) => {
+
       const textEl = tile.getElementById('text');
-      textEl.text = item.name;
+      configureTileStyles(textEl, tile, item);
+
       const touch = tile.getElementById('touchable');
-      Object.keys(item.styles).forEach(
-        styleProp => (textEl.style[styleProp] = item.styles[styleProp])
-      );
-      Object.keys(item.props).forEach(
-        prop => (textEl[prop] = item.props[prop])
-      );
-      const bg = tile.getElementsByClassName('bg')[0];
-      Object.keys(item.bgStyles).forEach(
-        bgStyle =>
-          bg.style[bgStyle] = item.bgStyles[bgStyle]
-      );
-      Object.keys(item.bgProps).forEach(
-        bgProp => bg[bgProp] = item.bgProps[bgProp]
-      );
+
       if (item.id === 'done-button') {
         touch.onclick = _e => {
           if (completedTaskIds.length > 0) {
@@ -144,4 +131,23 @@ function configureDelegate(poolType, elements, action) {
       }
     },
   };
+}
+
+function configureTileStyles(textEl, tile, item) {
+  textEl.text = item.name;
+  Object.keys(item.styles).forEach(
+    styleProp => (textEl.style[styleProp] = item.styles[styleProp])
+  );
+  Object.keys(item.props).forEach(
+    prop => (textEl[prop] = item.props[prop])
+  );
+  const bg = tile.getElementsByClassName('bg')[0];
+  Object.keys(item.bgStyles).forEach(
+    bgStyle =>
+      bg.style[bgStyle] = item.bgStyles[bgStyle]
+  );
+  Object.keys(item.bgProps).forEach(
+    bgProp => bg[bgProp] = item.bgProps[bgProp]
+  );
+
 }
