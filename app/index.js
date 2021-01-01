@@ -97,11 +97,9 @@ document.getElementById('no').onclick = () =>
 
 
 function configureDelegate(poolType, elements, action) {
-  elements.forEach(el => console.log(el.name))
   return {
     getTileInfo: idx => {
       const element = elements[idx];
-      console.log(`element ${element}`)
       return {
         type: poolType,
         index: idx,

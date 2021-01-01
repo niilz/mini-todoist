@@ -57,12 +57,19 @@ const headerProps = {
   textAnchor: 'middle',
   x: HORIZONTAL_CENTER,
 };
-const defaultStyles = {
+const projectStyles = {
   fill: 'blue',
 };
-const defaultProps = {
+const projectProps = {
+  textAnchor: 'middle',
+  x: HORIZONTAL_CENTER,
+};
+const taskStyles = {
+  fill: 'red',
+};
+const taskProps = {
   textAnchor: 'start',
-  x: 0,
+  x: 15,
 };
 const saveButtonStyles = {
   fill: 'green',
@@ -104,7 +111,7 @@ function _fetchProjects(apiToken) {
 
 function sendProjectsToApp(projects) {
   let viewProjects = projects.map(({ id, name }) => {
-    return { id, name, styles: defaultStyles, props: {} };
+    return { id, name, styles: projectStyles, props: projectProps };
   });
   viewProjects = [
     {
@@ -122,11 +129,8 @@ function sendProjectsToApp(projects) {
 }
 
 function sendTasksToApp(tasks, project) {
-  const styles = {
-    fill: 'red',
-  };
   let viewTasks = tasks.map(({ id, content }) => {
-    return { id, name: content, styles, props: defaultProps };
+    return { id, name: content, styles: taskStyles, props: taskProps };
   });
   viewTasks = [
     { id: 'header', name: project, styles: headerStyles, props: headerProps },
