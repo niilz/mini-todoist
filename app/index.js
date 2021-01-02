@@ -1,5 +1,6 @@
 import document from 'document';
 import * as msg from 'messaging';
+import { me as appbit } from 'appbit';
 import { Messenger } from '../app/messenger';
 import { Navigator } from '../app/navigator';
 import { Settings } from '../app/settings';
@@ -11,6 +12,7 @@ const projectsScreen = document.getElementById('projects-screen');
 const tasksScreen = document.getElementById('tasks-screen');
 const saveScreen = document.getElementById('save-screen');
 const noTokenScreen = document.getElementById('no-token-screen');
+const noInternetScreen = document.getElementById('no-internet-screen');
 
 let completedTaskIds = [];
 let tasksToDisplay = [];
@@ -18,6 +20,10 @@ let tasksToDisplay = [];
 const messenger;
 const navigator = new Navigator(projectsScreen);
 const settings = new Settings();
+
+if (!appbit.permissions.granted('access_internet')) {
+  navigator.navigateTo(noInternetScreen);
+}
 
 msg.peerSocket.onopen = () => {
   try {

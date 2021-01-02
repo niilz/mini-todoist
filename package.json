@@ -1,5 +1,5 @@
 {
-  "name": "einkaufsliste",
+  "name": "mini-todoist",
   "version": "0.1.0",
   "private": true,
   "license": "UNLICENSED",
@@ -10,10 +10,12 @@
   "fitbit": {
     "appUUID": "41a8d16f-ad52-42b6-8f43-b3440b5568f3",
     "appType": "app",
-    "appDisplayName": "Einkaufsliste",
+    "appDisplayName": "mini-todoist",
     "iconFile": "resources/icon.png",
-    "wipeColor": "#ffffff",
-    "requestedPermissions": [],
+    "wipeColor": "#db4035",
+    "requestedPermissions": [
+      "access_internet"
+    ],
     "buildTargets": [
       "meson"
     ],

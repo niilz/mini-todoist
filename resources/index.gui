@@ -3,6 +3,7 @@
   <link rel="import" href="tasks-screen.gui" />
   <link rel="import" href="save-screen.gui" />
   <link rel="import" href="no-token-screen.gui" />
+  <link rel="import" href="no-internet-screen.gui" />
   <!-- usage of Projects-screen -->
   <svg>
     <use id="projects-screen" href="#projects-screen" />
@@ -21,5 +22,10 @@
   <!-- usage of No-Token-Message -->
   <svg>
     <use id="no-token-screen" href="#no-token-screen" display="none" />
+  </svg>
+
+  <!-- usage of No-Internet-Message -->
+  <svg>
+    <use id="no-internet-screen" href="#no-internet-screen" display="none" />
   </svg>
 </svg>
