@@ -4,7 +4,7 @@ import { me as appbit } from 'appbit';
 import { Messenger } from '../app/messenger';
 import { Navigator } from '../app/navigator';
 import { Settings } from '../app/settings';
-import {TASK_COMPLETED_COLOR, TASK_COLOR} from '../resources/constants';
+import {TASK_COMPLETED_COLOR, TASK_COLOR, PRIMARY_COLOR} from '../resources/constants';
 
 const projectList = document.getElementById('project-list');
 const taskList = document.getElementById('task-list');
@@ -85,7 +85,7 @@ const taskOnClickHandler = (textEl, task) => {
     completedTaskIds.push(task.id);
   } else {
     // Mark task as uncompleted
-    textEl.style.fill = TASK_COLOR;
+    textEl.style.fill = PRIMARY_COLOR;
     completedTaskIds = completedTaskIds.filter(id => id !== task.id);
   }
   task.active = !task.active;

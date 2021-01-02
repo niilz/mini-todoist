@@ -6,10 +6,8 @@ import {
 } from '../companion/todoist.js';
 import { initTokenSettings } from '../companion/auth';
 import {
-  TASK_COLOR,
-  PROJECT_COLOR,
-  HEADER_COLOR,
-  BUTTON_COLOR,
+  PRIMARY_COLOR,
+  SECONDARY_COLOR,
   BG_COLOR,
   TILE_HEIGHT,
   DEVICE_WIDTH,
@@ -59,8 +57,12 @@ import {
 const percentOf = (percentage, relativeMax) => (percentage * relativeMax) / 100;
 let encoder = new TextEncoder();
 
-const headerStyles = {
-  fill: HEADER_COLOR,
+const projectHeaderStyles = {
+  fill: PRIMARY_COLOR,
+  fontFamily: 'Fabrikat-Black',
+};
+const taskHeaderStyles = {
+  fill: SECONDARY_COLOR,
   fontFamily: 'Fabrikat-Black',
 };
 const headerProps = {
@@ -68,7 +70,7 @@ const headerProps = {
   x: percentOf(50, DEVICE_WIDTH),
 };
 const projectStyles = {
-  fill: PROJECT_COLOR,
+  fill: SECONDARY_COLOR,
   fontFamily: 'Seville-Regular',
 };
 const projectProps = {
@@ -76,7 +78,7 @@ const projectProps = {
   x: percentOf(50, DEVICE_WIDTH),
 };
 const taskStyles = {
-  fill: TASK_COLOR,
+  fill: PRIMARY_COLOR,
   fontFamily: 'Seville-Condensed',
 };
 const taskProps = {
@@ -101,7 +103,7 @@ const bgProps = {
   height: TILE_HEIGHT,
 };
 const buttonBgStyles = {
-  fill: BUTTON_COLOR,
+  fill: SECONDARY_COLOR,
 };
 const buttonBgProps = {
   x: percentOf(25, DEVICE_WIDTH),
@@ -155,7 +157,7 @@ function sendProjectsToApp(projects) {
     {
       id: 'header',
       name: 'Wähle ein Projekt',
-      styles: headerStyles,
+      styles: projectHeaderStyles,
       props: headerProps,
       bgStyles: bgStyles,
       bgProps: bgProps,
@@ -183,7 +185,7 @@ function sendTasksToApp(tasks, project) {
     {
       id: 'header',
       name: project,
-      styles: headerStyles,
+      styles: taskHeaderStyles,
       props: headerProps,
       bgStyles: bgStyles,
       bgProps: bgProps,
