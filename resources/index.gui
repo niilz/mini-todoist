@@ -4,9 +4,21 @@
   <link rel="import" href="save-screen.gui" />
   <link rel="import" href="no-token-screen.gui" />
   <link rel="import" href="no-internet-screen.gui" />
+  <link rel="import" href="connecting-screen.gui" />
+  <link rel="import" href="loading-screen.gui" />
+
+  <!-- usage of Loading-Message -->
+  <svg>
+    <use id="connecting-screen" href="#connecting-screen" />
+  </svg>
+
+  <!-- usage of Loading-Message -->
+  <svg>
+    <use id="loading-screen" href="#loading-screen" display="none" />
+  </svg>
   <!-- usage of Projects-screen -->
   <svg>
-    <use id="projects-screen" href="#projects-screen" />
+    <use id="projects-screen" href="#projects-screen" display="none" />
   </svg>
 
   <!-- usage of items-screen -->

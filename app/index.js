@@ -8,28 +8,32 @@ import {TASK_COMPLETED_COLOR, TASK_COLOR, PRIMARY_COLOR} from '../resources/cons
 
 const projectList = document.getElementById('project-list');
 const taskList = document.getElementById('task-list');
+const connectingScreen = document.getElementById('connecting-screen');
+const loadingScreen = document.getElementById('loading-screen');
+const noTokenScreen = document.getElementById('no-token-screen');
+const noInternetAccessScreen = document.getElementById('no-internet-screen');
 const projectsScreen = document.getElementById('projects-screen');
 const tasksScreen = document.getElementById('tasks-screen');
 const saveScreen = document.getElementById('save-screen');
-const noTokenScreen = document.getElementById('no-token-screen');
-const noInternetScreen = document.getElementById('no-internet-screen');
 
 let completedTaskIds = [];
 let tasksToDisplay = [];
 
 const messenger;
-const navigator = new Navigator(projectsScreen);
+const navigator = new Navigator(connectingScreen);
 const settings = new Settings();
 
 if (!appbit.permissions.granted('access_internet')) {
-  navigator.navigateTo(noInternetScreen);
+  navigator.navigateTo(noInternetAccessScreen);
 }
 
 msg.peerSocket.onopen = () => {
   try {
     const apiToken = settings.getApiToken();
     messenger = new Messenger(apiToken);
+    navigator.navigateTo(loadingScreen);
     messenger.loadProjects();
+    navigator.navigateTo(projectsScreen);
   } catch (ex) {
     navigator.navigateTo(noTokenScreen);
   }

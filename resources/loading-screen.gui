@@ -1,0 +1,28 @@
+<svg>
+  <defs>
+    <symbol id="loading-screen">
+      <animate
+        attributeName="opacity"
+        begin="enable"
+        from="0"
+        to="1"
+        dur="0.2"
+      />
+      <animate
+        attributeName="opacity"
+        begin="disable"
+        from="1"
+        to="0"
+        dur="0.2"
+      />
+      <use id="loading-msg" class="warning" href="#mixed-text-center-mid">
+        <set
+          href="#header/text"
+          attributeName="text-buffer"
+          to="Daten werden abgefragt..."
+        />
+        <set href="#copy/text" attributeName="text-buffer" to="" />
+      </use>
+    </symbol>
+  </defs>
+</svg>
