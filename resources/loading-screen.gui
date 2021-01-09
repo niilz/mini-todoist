@@ -21,7 +21,7 @@
           attributeName="text-buffer"
           to="Daten werden abgefragt..."
         />
-        <set href="#copy/text" attributeName="text-buffer" to="" />
+        <set href="#copy/text" attributeName="text-buffer" to="..." />
       </use>
     </symbol>
   </defs>

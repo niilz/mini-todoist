@@ -4,7 +4,7 @@ import { me as appbit } from 'appbit';
 import { Messenger } from '../app/messenger';
 import { Navigator } from '../app/navigator';
 import { Settings } from '../app/settings';
-import {TASK_COMPLETED_COLOR, TASK_COLOR, PRIMARY_COLOR} from '../resources/constants';
+import { TASK_COMPLETED_COLOR, PRIMARY_COLOR } from '../resources/constants';
 
 const projectList = document.getElementById('project-list');
 const taskList = document.getElementById('task-list');
@@ -31,9 +31,8 @@ msg.peerSocket.onopen = () => {
   try {
     const apiToken = settings.getApiToken();
     messenger = new Messenger(apiToken);
-    navigator.navigateTo(loadingScreen);
     messenger.loadProjects();
-    navigator.navigateTo(projectsScreen);
+    navigator.navigateTo(loadingScreen);
   } catch (ex) {
     navigator.navigateTo(noTokenScreen);
   }
@@ -49,7 +48,7 @@ msg.peerSocket.onmessage = evt => {
       messenger = new Messenger(evt.data.token);
     }
     messenger.loadProjects();
-    navigator.navigateTo(projectsScreen);
+    navigator.navigateTo(loadingScreen);
   }
   if (evt.data.listType === 'project-list') {
     projectList.delegate = configureDelegate(
@@ -58,6 +57,7 @@ msg.peerSocket.onmessage = evt => {
       projectOnClickHandler
     );
     projectList.length = evt.data.projects.length;
+    navigator.navigateTo(projectsScreen);
   }
   if (evt.data.listType === 'task-list') {
     if (evt.data.done) {
@@ -68,6 +68,7 @@ msg.peerSocket.onmessage = evt => {
         taskOnClickHandler
       );
       taskList.length = tasksToDisplay.length;
+      navigator.navigateTo(tasksScreen);
     } else {
       taskBuffer = taskBuffer.concat(evt.data.tasks);
     }
@@ -102,9 +103,7 @@ document.getElementById('yes').onclick = () => {
   messenger.closeTasksById(completedTaskIds);
   completedTaskIds = [];
 };
-document.getElementById('no').onclick = () =>
-  navigator.navigateTo(tasksScreen);
-
+document.getElementById('no').onclick = () => navigator.navigateTo(tasksScreen);
 
 function configureDelegate(poolType, elements, action) {
   return {
@@ -123,7 +122,6 @@ function configureDelegate(poolType, elements, action) {
       };
     },
     configureTile: (tile, item) => {
-
       const textEl = tile.getElementById('text');
       configureTileStyles(textEl, tile, item);
 
@@ -151,16 +149,12 @@ function configureTileStyles(textEl, tile, item) {
   Object.keys(item.styles).forEach(
     styleProp => (textEl.style[styleProp] = item.styles[styleProp])
   );
-  Object.keys(item.props).forEach(
-    prop => (textEl[prop] = item.props[prop])
-  );
+  Object.keys(item.props).forEach(prop => (textEl[prop] = item.props[prop]));
   const bg = tile.getElementsByClassName('bg')[0];
   Object.keys(item.bgStyles).forEach(
-    bgStyle =>
-      bg.style[bgStyle] = item.bgStyles[bgStyle]
+    bgStyle => (bg.style[bgStyle] = item.bgStyles[bgStyle])
   );
   Object.keys(item.bgProps).forEach(
-    bgProp => bg[bgProp] = item.bgProps[bgProp]
+    bgProp => (bg[bgProp] = item.bgProps[bgProp])
   );
-
 }
