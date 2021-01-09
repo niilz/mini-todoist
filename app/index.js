@@ -80,7 +80,7 @@ msg.peerSocket.onerror = e =>
 
 const projectOnClickHandler = (_textEl, project) => {
   messenger.loadProjectById(project.id, project.name);
-  navigator.navigateTo(tasksScreen);
+  navigator.navigateTo(loadingScreen);
 };
 
 const taskOnClickHandler = (textEl, task) => {
