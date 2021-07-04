@@ -18,6 +18,7 @@ const saveScreen = document.getElementById('save-screen');
 
 let completedTaskIds = [];
 let tasksToDisplay = [];
+let projectsToDisplay = [];
 
 const messenger;
 const navigator = new Navigator(connectingScreen);
@@ -39,6 +40,7 @@ msg.peerSocket.onopen = () => {
 };
 
 let taskBuffer = [];
+let projectBuffer = [];
 msg.peerSocket.onmessage = evt => {
   if (!evt || !evt.data) return;
 
@@ -51,17 +53,22 @@ msg.peerSocket.onmessage = evt => {
     navigator.navigateTo(loadingScreen);
   }
   if (evt.data.listType === 'project-list') {
-    projectList.delegate = configureDelegate(
-      'project-pool',
-      evt.data.projects,
-      projectOnClickHandler
-    );
-    projectList.length = evt.data.projects.length;
-    navigator.navigateTo(projectsScreen);
+    if (evt.data.done) {
+      projectsToDisplay = projectBuffer.concat(evt.data.items);
+      projectList.delegate = configureDelegate(
+        'project-pool',
+        projectsToDisplay,
+        projectOnClickHandler
+      );
+      projectList.length = projectsToDisplay.length;
+      navigator.navigateTo(projectsScreen);
+    } else {
+      projectBuffer = projectBuffer.concat(evt.data.items);
+    }
   }
   if (evt.data.listType === 'task-list') {
     if (evt.data.done) {
-      tasksToDisplay = taskBuffer.concat(evt.data.tasks);
+      tasksToDisplay = taskBuffer.concat(evt.data.items);
       taskList.delegate = configureDelegate(
         'task-pool',
         tasksToDisplay,
@@ -70,7 +77,7 @@ msg.peerSocket.onmessage = evt => {
       taskList.length = tasksToDisplay.length;
       navigator.navigateTo(tasksScreen);
     } else {
-      taskBuffer = taskBuffer.concat(evt.data.tasks);
+      taskBuffer = taskBuffer.concat(evt.data.items);
     }
   }
 };

@@ -137,9 +137,9 @@ msg.peerSocket.onmessage = evt => {
 const isSocketReady = () => msg.peerSocket.readyState === msg.peerSocket.OPEN;
 
 function _fetchProjects(apiToken) {
-  fetchProjects(apiToken).then(parsedProjects =>
-    sendProjectsToApp(parsedProjects)
-  );
+  fetchProjects(apiToken).then(parsedProjects => {
+    sendProjectsToApp(parsedProjects);
+  });
 }
 
 function sendProjectsToApp(projects) {
@@ -166,7 +166,7 @@ function sendProjectsToApp(projects) {
   ];
 
   if (isSocketReady()) {
-    msg.peerSocket.send({ listType: 'project-list', projects: viewProjects });
+    sendItemsInChunks(viewProjects, 'project-list');
   }
 }
 
@@ -202,24 +202,7 @@ function sendTasksToApp(tasks, project) {
   ];
 
   if (isSocketReady()) {
-    let toSend = [];
-    while (viewTasks.length > 0) {
-      if (canAddNextItem(toSend, viewTasks[0])) {
-        toSend.push(viewTasks.shift());
-      } else {
-        msg.peerSocket.send({
-          listType: 'task-list',
-          tasks: toSend,
-          done: false,
-        });
-        toSend = [];
-      }
-    }
-    msg.peerSocket.send({
-      listType: 'task-list',
-      tasks: toSend,
-      done: true,
-    });
+    sendItemsInChunks(viewTasks, 'task-list');
   }
 }
 
@@ -238,3 +221,24 @@ function getByteSize(element) {
 
 msg.peerSocket.onerror = e =>
   console.log(`COMP: Connection-Error: ${e.code} - ${e.message}`);
+
+function sendItemsInChunks(viewItems, listType) {
+  let toSend = [];
+  while (viewItems.length > 0) {
+    if (canAddNextItem(toSend, viewItems[0])) {
+      toSend.push(viewItems.shift());
+    } else {
+      msg.peerSocket.send({
+        listType,
+        items: toSend,
+        done: false,
+      });
+      toSend = [];
+    }
+  }
+  msg.peerSocket.send({
+    listType,
+    items: toSend,
+    done: true,
+  });
+}
